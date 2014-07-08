@@ -1,0 +1,50 @@
+input{
+    background-color: #cccccc;
+}
+
+.texto-explicacion{
+    font-size: 0;
+}
+
+.texto-explicacion.explicacion-visible{
+    font-size: 10px;
+}
+
+.explicacion{
+    background-color: yellow;
+}
+
+input.calculado{
+    border: 0px;
+    background-color: #bbbbbb;
+}
+
+.evaluacion{
+    border-style: solid;
+    border-width: 10px;
+    margin: 10px;
+    padding: 10px;
+}
+
+.examenes, .trabajos, .actitud{
+    border-style: solid;
+    margin: 5px;
+    border-width: 5px;
+    padding: 5px;
+}
+
+.llave-expandible{
+    display: inline;
+    border-style: dashed;
+    border-width: 2px;
+    margin: 2px;
+    padding: 2px;
+}
+
+.colapsable{
+    display: inline-block;
+}
+
+.oculto-por-llave{
+    display: none;
+}
