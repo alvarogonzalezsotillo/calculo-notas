@@ -68,7 +68,7 @@
                 
 				ajustaCampoNota( $("input.nota") );
 				
-                registraCalculadorNotaExamenes("evaluacion1");
+                registraCalculadorNotaExamenes();
                 registraCalculadorNotaEvaluacion("evaluacion1");
                 
                 actualizaCalculados();
@@ -159,19 +159,47 @@
                 $(".calculado").prop( "readonly", "readonly" )
             }
             
-            function registraCalculadorNotaExamenes(evaluacion){
-                var sufijos = ["-parcial1","-parcial2","-final", "-recuperacion"];
+            function registraCalculadorNotaExamenes(){
                 
-                for( var s in sufijos ){
-                    var id = evaluacion+sufijos[s]; 
-                    console.log( "registrando en " + id );
-                    var e = $("#"+id);
-                    console.log( "  econtrado:" + e.length );
-                    e.change( function(){
-                        console.log( id + " changed" );
-                        calculaNotaExamenes(evaluacion);
-                    });
+                function _registraCalculadorExamenes( number, elem ){
+                    var context = $(elem);
+                    function _calculadorExamenes(){
+                        var total = $(".evaluacion-examenes",context);
+                        var parciales = $(".evaluacion-examenes-parcial",context);
+                        var recuperacion = $(".evaluacion-examenes-recuperacion",context);
+                        var final = $(".evaluacion-examenes-final",context);
+                        
+                        var finalV = parseFloat( final.val() ) || 0;
+                        var recuperacionV = parseFloat( recuperacion.val() ) || 0;
+                        var p1 = parseFloat( parciales.get(0).value ) || 0;
+                        var p2 = parseFloat( parciales.get(1).value ) || 0;
+                        
+                        console.log( "p1:" + p1 + "  p2:" + p2 + "  finalV:" + finalV + "  recuperacionV:" + recuperacionV );
+                        var mediaP = (p1 + p2)/2;
+                        var nota = mediaP;
+                        var valeMediaP = mediaP >= 5.0;
+                        if( valeMediaP ){
+                            nota = Math.max(finalV,mediaP);
+                        }
+                        else if( finalV > mediaP ){
+                            nota = finalV;
+                        }
+                        else{
+                            nota = mediaP;
+                        }
+
+                        nota = Math.max(nota,recuperacionV);
+                        console.log( "nota:" + nota );
+
+                        total.val(nota).change();
+                    }
+                    
+                    $(".evaluacion-examenes-parcial",context).change( _calculadorExamenes );
+                    $(".evaluacion-examenes-recuperacion",context).change( _calculadorExamenes );
+                    $(".evaluacion-examenes-final",context).change( _calculadorExamenes );
                 }
+                
+                $(".examenes").each( _registraCalculadorExamenes );
             }
             
             function calculaNotaTrabajos(evaluacion){
@@ -205,34 +233,6 @@
                 }
                 $("#" + evaluacion + "-total" ).val(suma).change();
             }
-            
-            function calculaNotaExamenes(evaluacion){
-                var p1 = parseFloat( $("#"+evaluacion+"-parcial1").val() );
-                p1 = p1 || 0;
-                var p2 = parseFloat( $("#"+evaluacion+"-parcial2").val() );
-                p2 = p2 || 0;
-                var final = parseFloat( $("#"+evaluacion+"-final").val() );
-                final = final || 0;
-                var recuperacion = parseFloat( $("#"+evaluacion+"-recuperacion").val() );
-                recuperacion = recuperacion || 0;
-                console.log( p1 + " " + p2 + " " + final + " " + recuperacion );
-                var mediaP = (p1 + p2)/2;
-                var valeMediaP = mediaP >= 5.0;
-                if( valeMediaP ){
-                    nota = Math.max(final,mediaP);
-                }
-                else if( final > mediaP ){
-                    nota = final;
-                }
-                else{
-                    nota = mediaP;
-                }
-                
-                nota = Math.max(nota,recuperacion);
-                
-                $("#"+evaluacion+"-examenes").val(nota).change();
-            }
-
             
             function convertirEnLlaveExpandible(id){
                 var contenedorLlave = $("<div/>",{
@@ -285,22 +285,22 @@
 
                         <div class="parcial">
                             <label>Parcial 1</label>
-                            <input class="nota evaluacion-examenes-parcial1" type="number"/>
+                            <input class="nota evaluacion-examenes-parcial" type="number"/>
                         </div>
 
                         <div class="parcial">
                             <label>Parcial 2</label>
-                            <input class="nota evaluacion-examenes-parcial2" type="number"/>
+                            <input class="nota evaluacion-examenes-parcial" type="number"/>
                         </div>
 
                         <div class="final">
                             <label>Final</label>
-                            <input class="nota evaluacion-examenes-" type="number" id="evaluacion1-final"/>
+                            <input class="nota evaluacion-examenes-final" type="number" id="evaluacion1-final"/>
                         </div>
 
-                        <div class="recuperacion" id="div-evaluacion1-recuperacion">
-                            <label for="evaluacion1-recuperacion">Recuperación</label>
-                            <input class="nota" type="number" id="evaluacion1-recuperacion"/>
+                        <div class="recuperacion">
+                            <label>Recuperación</label>
+                            <input class="nota evaluacion-examenes-recuperacion" type="number"/>
                         </div>
                     </div>
 
