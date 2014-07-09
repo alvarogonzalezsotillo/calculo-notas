@@ -59,8 +59,19 @@
                 });
             }
 
+            function aseguraNumeroEvaluaciones(numero){
+                var evElement = $(".evaluacion").first();
+                var parent = evElement.parent();
+                for( var i = 0 ; i < numero-1 ; i++ ){
+                    parent.append( evElement.clone() ); 
+                }
+            }
+            
             function ready(){
               
+                aseguraNumeroEvaluaciones(3);
+                
+          
                 convertirEnExplicacion(".explicacion-examenes",explicacionExamenes);
                 convertirEnExplicacion(".explicacion-trabajos",explicacionTrabajos);
                 convertirEnExplicacion(".explicacion-actitud",explicacionActitud);
@@ -69,7 +80,7 @@
 				ajustaCampoNota( $("input.nota") );
 				
                 registraCalculadorNotaExamenes();
-                registraCalculadorNotaEvaluacion("evaluacion1");
+                registraCalculadorNotaEvaluaciones();
                 
                 actualizaCalculados();
                 actualizaBotonesAnadirTrabajos();
@@ -87,17 +98,31 @@
 						    prop("step",".1");
 			}
             
-            function registraCalculadorNotaEvaluacion(evaluacion){
-                var listener = function(){
-                    console.log( "Ha cambiado la " + evaluacion );
+            function registraCalculadorNotaEvaluaciones(){
+                var listener = function(event){
+                    var evaluacion = $(event.currentTarget).parents(".evaluacion").first();
+                    console.log( "Ha cambiado la evaluacion:" + evaluacion.parent().html());
                     calculaNotaEvaluacion(evaluacion);
                 };
-                var e = $("#"+evaluacion+"-examenes");
-                console.log( "registrando para evaluacion: examenes:" + e.length );
-                e.change(listener);
-                $("#"+evaluacion+"-trabajos").change(listener);
-                $("#"+evaluacion+"-actitud").change(listener);
+                $(".evaluacion-examenes").change(listener);
+                $(".evaluacion-trabajos").change(listener);
+                $(".evaluacion-actitud").change(listener);
             }
+
+            function calculaNotaEvaluacion(evaluacion){
+                var elems = [".evaluacion-examenes",".evaluacion-trabajos",".evaluacion-actitud"];
+                var percentage = [.65,.3,.05];
+                var suma = 0;
+                for( i in elems ){
+                    var id = elems[i];
+                    var val = $(id,$(evaluacion)).val();
+                    var v = parseFloat( val ) || 0;
+                    console.log( id + ":" + val + ":" + v );
+                    suma = suma + v*percentage[i];
+                }
+                $(".evaluacion-total",evaluacion ).val(suma).change();
+            }
+            
             
             function actualizaBotonesAnadirTrabajos(){
                 
@@ -219,20 +244,6 @@
                 $("#" +  evaluacion + "-trabajos").val(suma/cantidad).change();
             }
             
-            function calculaNotaEvaluacion(evaluacion){
-                var ids = ["-examenes","-trabajos","-actitud"];
-                var percentage = [.65,.3,.05];
-                var suma = 0;
-                for( i in ids ){
-                    var id = "#" + evaluacion + ids[i];
-                    var val = $(id).val();
-                    var v = parseFloat( val );
-                    console.log( id + ":" + val + ":" + v );
-                    v = isNaN(v) ? 0 : v;
-                    suma = suma + v*percentage[i];
-                }
-                $("#" + evaluacion + "-total" ).val(suma).change();
-            }
             
             function convertirEnLlaveExpandible(id){
                 var contenedorLlave = $("<div/>",{
@@ -306,26 +317,26 @@
 
                 </div>
 
-                <div id="div-evaluacion1-trabajos" class="trabajos">
+                <div class="trabajos">
 
                     <div class="total">
-                        <label for="evaluacion1-trabajos">Nota de trabajos</label>
-                        <input class="nota calculado" type="number" id="evaluacion1-trabajos"/>
+                        <label>Nota de trabajos</label>
+                        <input class="nota calculado evaluacion-trabajos" type="number"/>
                     </div>
 
                     <div class="explicacion-trabajos explicacion">
                     </div>    
 
-                    <div id="evaluacion1-trabajos-contenedor"  class="calculo-trabajos colapsable">
+                    <div  class="calculo-trabajos colapsable">
                         <div class="nuevo-trabajo">+trabajo</div>
                     </div>
 
                 </div>
 
-                <div id="div-evaluacion1-actitud" class="actitud">
+                <div class="actitud">
                     <div class="total">
-                        <label for="evaluacion1-actitud">Nota de actitud</label>
-                        <input class="nota" type="number" id="evaluacion1-actitud"/>
+                        <label>Nota de actitud</label>
+                        <input class="nota evaluacion-actitud" type="number" />
                     </div>
 
                     <div class="explicacion-actitud explicacion"></div>
