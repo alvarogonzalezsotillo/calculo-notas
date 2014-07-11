@@ -1,13 +1,19 @@
+.total, .colapsable, .explicacion, .contenedor-llave-expandible{
+    display: inline-block;
+}
+
+
 input{
     background-color: #cccccc;
 }
 
 .texto-explicacion{
-    font-size: 0;
+    display: none;
+    font-size: 10px;
 }
 
 .texto-explicacion.explicacion-visible{
-    font-size: 10px;
+    display: block;
 }
 
 .explicacion{
@@ -41,9 +47,6 @@ input.calculado{
     padding: 2px;
 }
 
-.colapsable{
-    display: inline-block;
-}
 
 .oculto-por-llave{
     display: none;

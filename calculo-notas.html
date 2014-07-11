@@ -14,50 +14,7 @@
 		<link href="css/ui-lightness/jquery-ui-1.10.4.css" rel="stylesheet" />
         
         <script type="text/javascript">
-			var inputPattern = "((10)|(([0-9])(\\.[0-9]*)?)|(\\.[0-9]*))"
 		
-            var explicacionEvaluacion = "La nota de la evaluación se calcula a partir de las notas de los " +
-                "exámenes, trabajos y actitud. Es una suma poderada en la que los exámenes cuentan un 65%," +
-                " los trabajos un 30% y la actitud un 5%";
-            
-            var explicacionExamenes = "Si se tiene más de un 3,5 en cada parcial, se calcula su media." +
-                        "La nota será la media de los parciales o la del final, la que sea mayor." +
-                        "Si se suspendiera la evaluación, en Junio habría una recuperación de la parte de exámenes de la nota." +
-                        "(Los trabajos podrían recuperarse volviendo a entregarlos con los fallos corregidos).";
-
-            var explicacionTrabajos = "En cada evaluación habrá una cantidad variable de trabajos (al menos uno). La nota de los trabajos será la" +
-                    "media de las notas obtenidas." +
-                    "Para recuperar un trabajo, se deberá entregar de nuevo con los errores corregidos. Se avisará al profesor" +
-                    "de qué trabajos se han reenviado el día del examen final de la evaluación. Un trabajo entregado tarde, o un" +
-                    "trabajo reenviado para recuperar nota, puede obtener como máximo un 6 de puntuación.";
-
-            var explicacionActitud = "La actitud se determina por la proactividad y ganas de trabajar que demuestra un alumno en clase." +
-                        "La nota de actitud se calcula, en su mayor medida, por las veces que el alumno se presenta voluntario para " +
-                        "resolver problemas en la pizarra, por las faltas de asistencia no justificadas y por la colaboración que "+
-                        "demuestre con otros compañeros";
-
-            
-            function convertirEnExplicacion( selector, explicacion ){
-                var elems = $(selector);
-                elems.each( function(number,elem){
-                    var toggle = $("<div/>", {
-                        "class" : "toggle-explicacion"
-                    });
-                    toggle.html("?");
-                    $(elem).append(toggle);
-                    
-                    var textoExplicacion = $("<div/>",{
-                        "class" : "texto-explicacion"
-                    }).html(explicacion);
-                    $(elem).append(textoExplicacion);
-
-                    toggle.click( function(){
-                        textoExplicacion.toggleClass("explicacion-visible");
-                    });
-
-                
-                });
-            }
 
             function aseguraNumeroEvaluaciones(numero){
                 var evElement = $(".evaluacion").first();
@@ -67,15 +24,65 @@
                 }
             }
             
-            function ready(){
-              
-                aseguraNumeroEvaluaciones(3);
-                
-          
+            function convertirExplicaciones(){
+                var explicacionModulo = "La nota del módulo es la media de las notas de las evaluaciones, redondeada. "
+                    "Si alguna evaluación puntua por debajo de 5, la nota máxima será un 4."
+
+                var explicacionEvaluacion = "La nota de la evaluación se calcula a partir de las notas de los " +
+                    "exámenes, trabajos y actitud. Es una suma poderada en la que los exámenes cuentan un 65%," +
+                    " los trabajos un 30% y la actitud un 5%";
+
+                var explicacionExamenes = "Si se tiene más de un 3,5 en cada parcial, se calcula su media." +
+                            "La nota será la media de los parciales o la del final, la que sea mayor." +
+                            "Si se suspendiera la evaluación, en Junio habría una recuperación de la parte de exámenes de la nota." +
+                            "(Los trabajos podrían recuperarse volviendo a entregarlos con los fallos corregidos).";
+
+                var explicacionTrabajos = "En cada evaluación habrá una cantidad variable de trabajos (al menos uno). La nota de los trabajos será la" +
+                        "media de las notas obtenidas." +
+                        "Para recuperar un trabajo, se deberá entregar de nuevo con los errores corregidos. Se avisará al profesor" +
+                        "de qué trabajos se han reenviado el día del examen final de la evaluación. Un trabajo entregado tarde, o un" +
+                        "trabajo reenviado para recuperar nota, puede obtener como máximo un 6 de puntuación.";
+
+                var explicacionActitud = "La actitud se determina por la proactividad y ganas de trabajar que demuestra un alumno en clase." +
+                            "La nota de actitud se calcula, en su mayor medida, por las veces que el alumno se presenta voluntario para " +
+                            "resolver problemas en la pizarra, por las faltas de asistencia no justificadas y por la colaboración que "+
+                            "demuestre con otros compañeros";
+
+
+                function convertirEnExplicacion( selector, explicacion ){
+                    var elems = $(selector);
+                    elems.each( function(number,elem){
+                        var toggle = $("<div/>", {
+                            "class" : "toggle-explicacion"
+                        });
+                        toggle.html("?");
+                        $(elem).append(toggle);
+
+                        var textoExplicacion = $("<div/>",{
+                            "class" : "texto-explicacion"
+                        }).html(explicacion);
+                        $(elem).append(textoExplicacion);
+
+                        toggle.click( function(){
+                            textoExplicacion.toggleClass("explicacion-visible");
+                        });
+
+
+                    });
+                }
+
                 convertirEnExplicacion(".explicacion-examenes",explicacionExamenes);
                 convertirEnExplicacion(".explicacion-trabajos",explicacionTrabajos);
                 convertirEnExplicacion(".explicacion-actitud",explicacionActitud);
                 convertirEnExplicacion(".explicacion-evaluacion",explicacionEvaluacion);
+                convertirEnExplicacion(".explicacion-modulo",explicacionModulo);
+            }
+            
+            function ready(){
+              
+                aseguraNumeroEvaluaciones(3);
+                
+                convertirExplicaciones();
                 
 				ajustaCampoNota( $("input.nota") );
 				
@@ -92,6 +99,8 @@
             }
             
 			function ajustaCampoNota( jqueryInput ){
+    			var inputPattern = "((10)|(([0-9])(\\.[0-9]*)?)|(\\.[0-9]*))"
+
 				jqueryInput.prop("pattern",inputPattern).
 				            prop("min","0").
 						    prop("max","10").
@@ -99,32 +108,52 @@
 			}
             
             function registraCalculadorNotaEvaluaciones(){
+
+                function calculaNotaEvaluacion(evaluacion){
+                    var elems = [".evaluacion-examenes",".evaluacion-trabajos",".evaluacion-actitud"];
+                    var percentage = [.65,.3,.05];
+                    var suma = 0;
+                    for( i in elems ){
+                        var id = elems[i];
+                        var val = $(id,$(evaluacion)).val();
+                        var v = parseFloat( val ) || 0;
+                        console.log( id + ":" + val + ":" + v );
+                        suma = suma + v*percentage[i];
+                    }
+                    $(".evaluacion-total",evaluacion ).val(suma).change();
+                }
+
                 var listener = function(event){
                     var evaluacion = $(event.currentTarget).parents(".evaluacion").first();
-                    console.log( "Ha cambiado la evaluacion:" + evaluacion.parent().html());
                     calculaNotaEvaluacion(evaluacion);
                 };
+                
                 $(".evaluacion-examenes").change(listener);
                 $(".evaluacion-trabajos").change(listener);
                 $(".evaluacion-actitud").change(listener);
             }
 
-            function calculaNotaEvaluacion(evaluacion){
-                var elems = [".evaluacion-examenes",".evaluacion-trabajos",".evaluacion-actitud"];
-                var percentage = [.65,.3,.05];
-                var suma = 0;
-                for( i in elems ){
-                    var id = elems[i];
-                    var val = $(id,$(evaluacion)).val();
-                    var v = parseFloat( val ) || 0;
-                    console.log( id + ":" + val + ":" + v );
-                    suma = suma + v*percentage[i];
-                }
-                $(".evaluacion-total",evaluacion ).val(suma).change();
-            }
             
             
             function actualizaBotonesAnadirTrabajos(){
+
+                function calculaNotaTrabajos(evaluacion){
+                    var id = "#" + evaluacion + "-trabajos-contenedor";
+                    console.log( id );
+                    var trabajos = $("input.nota", id );
+                    console.info( trabajos );
+                    var cantidad = trabajos.length;
+                    console.log("cantidad:" + cantidad);
+                    var suma = 0;
+                    trabajos.each( function(number,element){
+                        var v = parseFloat(element.value);  
+                        v = isNaN(v) ? 0 : v;
+                        console.log( number + " " + v );
+                        suma = suma + v;
+                    });
+                    $("#" +  evaluacion + "-trabajos").val(suma/cantidad).change();
+                }
+
                 
                 $(".nuevo-trabajo").button().click( function(event){
                     
@@ -227,22 +256,6 @@
                 $(".examenes").each( _registraCalculadorExamenes );
             }
             
-            function calculaNotaTrabajos(evaluacion){
-                var id = "#" + evaluacion + "-trabajos-contenedor";
-                console.log( id );
-                var trabajos = $("input.nota", id );
-                console.info( trabajos );
-                var cantidad = trabajos.length;
-                console.log("cantidad:" + cantidad);
-                var suma = 0;
-                trabajos.each( function(number,element){
-                    var v = parseFloat(element.value);  
-                    v = isNaN(v) ? 0 : v;
-                    console.log( number + " " + v );
-                    suma = suma + v;
-                });
-                $("#" +  evaluacion + "-trabajos").val(suma/cantidad).change();
-            }
             
             
             function convertirEnLlaveExpandible(id){
@@ -271,83 +284,98 @@
     </head>        
 
     <body>
-        <div class="evaluacion">
+        
+        <div class="modulo">
 
             <div class="total">
-                <label>Nota de la evaluación 1</label>
-                <input class="nota calculado evaluacion-total" type="number"/>
+                <label>Nota del módulo</label>
+                <input class="nota calculado modulo-total" type="number"/>
             </div>
 
-            <div class="explicacion-evaluacion explicacion">
+            <div class="explicacion-modulo explicacion">
             </div>
 
-            <div class="calculo-total colapsable">
+            <div class="calculo-modulo colapsable">
+                <div class="evaluacion">
 
-                <div class="examenes">
                     <div class="total">
-                        <label>Nota de exámenes</label>	
-                        <input class="nota calculado evaluacion-examenes" type="number"/>
+                        <label>Nota de la evaluación 1</label>
+                        <input class="nota calculado evaluacion-total" type="number"/>
                     </div>
 
-                    <div class="explicacion-examenes explicacion">
+                    <div class="explicacion-evaluacion explicacion">
                     </div>
-                    
-                    <div class="calculo-examenes colapsable">    
 
-                        <div class="parcial">
-                            <label>Parcial 1</label>
-                            <input class="nota evaluacion-examenes-parcial" type="number"/>
+                    <div class="calculo-total colapsable">
+
+                        <div class="examenes">
+                            <div class="total">
+                                <label>Nota de exámenes</label>	
+                                <input class="nota calculado evaluacion-examenes" type="number"/>
+                            </div>
+
+                            <div class="explicacion-examenes explicacion">
+                            </div>
+
+                            <div class="calculo-examenes colapsable">    
+
+                                <div class="parcial">
+                                    <label>Parcial 1</label>
+                                    <input class="nota evaluacion-examenes-parcial" type="number"/>
+                                </div>
+
+                                <div class="parcial">
+                                    <label>Parcial 2</label>
+                                    <input class="nota evaluacion-examenes-parcial" type="number"/>
+                                </div>
+
+                                <div class="final">
+                                    <label>Final</label>
+                                    <input class="nota evaluacion-examenes-final" type="number" id="evaluacion1-final"/>
+                                </div>
+
+                                <div class="recuperacion">
+                                    <label>Recuperación</label>
+                                    <input class="nota evaluacion-examenes-recuperacion" type="number"/>
+                                </div>
+                            </div>
+
                         </div>
 
-                        <div class="parcial">
-                            <label>Parcial 2</label>
-                            <input class="nota evaluacion-examenes-parcial" type="number"/>
+                        <div class="trabajos">
+
+                            <div class="total">
+                                <label>Nota de trabajos</label>
+                                <input class="nota calculado evaluacion-trabajos" type="number"/>
+                            </div>
+
+                            <div class="explicacion-trabajos explicacion">
+                            </div>    
+
+                            <div  class="calculo-trabajos colapsable">
+                                <div class="nuevo-trabajo">+trabajo</div>
+                            </div>
+
                         </div>
 
-                        <div class="final">
-                            <label>Final</label>
-                            <input class="nota evaluacion-examenes-final" type="number" id="evaluacion1-final"/>
+                        <div class="actitud">
+                            <div class="total">
+                                <label>Nota de actitud</label>
+                                <input class="nota evaluacion-actitud" type="number" />
+                            </div>
+
+                            <div class="explicacion-actitud explicacion"></div>
+
                         </div>
 
-                        <div class="recuperacion">
-                            <label>Recuperación</label>
-                            <input class="nota evaluacion-examenes-recuperacion" type="number"/>
-                        </div>
                     </div>
+
 
                 </div>
 
-                <div class="trabajos">
-
-                    <div class="total">
-                        <label>Nota de trabajos</label>
-                        <input class="nota calculado evaluacion-trabajos" type="number"/>
-                    </div>
-
-                    <div class="explicacion-trabajos explicacion">
-                    </div>    
-
-                    <div  class="calculo-trabajos colapsable">
-                        <div class="nuevo-trabajo">+trabajo</div>
-                    </div>
-
-                </div>
-
-                <div class="actitud">
-                    <div class="total">
-                        <label>Nota de actitud</label>
-                        <input class="nota evaluacion-actitud" type="number" />
-                    </div>
-
-                    <div class="explicacion-actitud explicacion"></div>
-
-                </div>
-            
             </div>
-
-
         </div>
-
+        
     </body>
 
 
