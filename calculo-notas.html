@@ -64,11 +64,16 @@
                         $(elem).append(textoExplicacion);
 
                         toggle.click( function(){
-                            textoExplicacion.toggleClass("explicacion-visible");
+                            muestraOcultaTextoExplicacion(textoExplicacion);
                         });
 
 
                     });
+                }
+                
+                function muestraOcultaTextoExplicacion(elem){
+                    // TO DO: UTILIZAR JQUERYUI
+                    $(elem).toggleClass("explicacion-visible");
                 }
 
                 convertirEnExplicacion(".explicacion-examenes",explicacionExamenes);
@@ -78,27 +83,7 @@
                 convertirEnExplicacion(".explicacion-modulo",explicacionModulo);
             }
             
-            function ready(){
-              
-                aseguraNumeroEvaluaciones(3);
-                
-                convertirExplicaciones();
-                
-				ajustaCampoNota( $("input.nota") );
-				
-                registraCalculadorNotaExamenes();
-                registraCalculadorNotaEvaluaciones();
-                
-                actualizaCalculados();
-                actualizaBotonesAnadirTrabajos();
-                
-                $(".colapsable").each( function(number,elem){
-                    convertirEnLlaveExpandible(elem);
-                });
-                
-            }
-            
-			function ajustaCampoNota( jqueryInput ){
+    		function ajustaCampoNota( jqueryInput ){
     			var inputPattern = "((10)|(([0-9])(\\.[0-9]*)?)|(\\.[0-9]*))"
 
 				jqueryInput.prop("pattern",inputPattern).
@@ -137,21 +122,23 @@
             
             function actualizaBotonesAnadirTrabajos(){
 
-                function calculaNotaTrabajos(evaluacion){
-                    var id = "#" + evaluacion + "-trabajos-contenedor";
-                    console.log( id );
-                    var trabajos = $("input.nota", id );
-                    console.info( trabajos );
-                    var cantidad = trabajos.length;
+                function calculaNotaTrabajos(trabajos){
+                    
+                    var notaEvaluacionTrabajos = $(".evaluacion-trabajos",trabajos);
+                    var notasTrabajos = $(".nota-trabajo",trabajos); 
+                    var cantidad = notasTrabajos.length;
                     console.log("cantidad:" + cantidad);
                     var suma = 0;
-                    trabajos.each( function(number,element){
+                    notasTrabajos.each( function(number,element){
                         var v = parseFloat(element.value);  
                         v = isNaN(v) ? 0 : v;
                         console.log( number + " " + v );
                         suma = suma + v;
                     });
-                    $("#" +  evaluacion + "-trabajos").val(suma/cantidad).change();
+                    var nota = suma/cantidad;
+                    
+                    console.log( "nota de trabajos:" + nota );
+                    notaEvaluacionTrabajos.val(suma/cantidad).change();
                 }
 
                 
@@ -160,28 +147,21 @@
                     var t = $(event.target);
                     var contenedorTrabajos = t.closest(".calculo-trabajos");
                     
-                    var idContenedor = contenedorTrabajos.prop("id");
-					var evaluacion = idContenedor.substr(0,"evaluacionX".length);
-                    console.log( "idContenedor:" + idContenedor );
-                    console.log( "evaluacion:" + evaluacion );
-                    var existentes = $("." + idContenedor + "-trabajo" );
-                    var indice = existentes.length+1;
+                    var trabajos = t.closest(".trabajos");
+                    var notaTrabajos = $(".evaluacion-trabajos",trabajos);
                     
                     var div = $("<div/>", {
                         "class" : "trabajo"                                       
                     });
                     contenedorTrabajos.append( div );
                     
-					var label = $("<label/>",{
-						"for" : idContenedor + "-" + indice
-					});
+					var label = $("<label/>")
 					label.html( "Trabajo" );
                     div.append( label );
 				
 					var campoNota = $("<input/>", {
-						"id": idContenedor + "-" + indice,
 						"type" : "number",
-						"class" : "nota " + idContenedor + "-trabajo"
+						"class" : "nota-trabajo"
 						
 					} );
 				
@@ -197,21 +177,18 @@
                     
                     quitarNota.button().click( function(event){
                         div.remove();
-                        calculaNotaTrabajos(evaluacion);
+                        calculaNotaTrabajos(trabajos);
                     });
                     
                     campoNota.change( function(){
-                        calculaNotaTrabajos(evaluacion);
+                        calculaNotaTrabajos(trabajos);
                     });
                 
-                    calculaNotaTrabajos(evaluacion);
+                    calculaNotaTrabajos(trabajos);
                     
                 });
             }
             
-            function actualizaCalculados(){
-                $(".calculado").prop( "readonly", "readonly" )
-            }
             
             function registraCalculadorNotaExamenes(){
                 
@@ -258,23 +235,55 @@
             
             
             
-            function convertirEnLlaveExpandible(id){
-                var contenedorLlave = $("<div/>",{
-                    "class": "contenedor-llave-expandible"
+    
+                    
+            function ready(){
+
+                function actualizaCalculados(){
+                    $(".calculado").prop( "readonly", "readonly" )
+                }
+
+                function convertirEnLlaveExpandible(id){
+                    var contenedorLlave = $("<div/>",{
+                        "class": "contenedor-llave-expandible"
+                    });
+
+                    var llave = $("<div>{</div>").toggleClass( "llave-expandible" );
+
+                    $(id).after(contenedorLlave);
+                    $(id).toggleClass("oculto-por-llave");
+                    contenedorLlave.append(llave);
+                    contenedorLlave.append($(id));
+
+                    llave.click( function(){
+                        muestraOcultaLlave(id);
+                    });
+
+                    function muestraOcultaLlave(elem){
+                        // TO DO: UTILIZAR JQUERYUI
+                        $(elem).toggleClass( "oculto-por-llave" );
+                    }
+                }
+                
+                aseguraNumeroEvaluaciones(3);
+                
+                convertirExplicaciones();
+                
+				ajustaCampoNota( $("input.nota") );
+				
+                registraCalculadorNotaExamenes();
+                registraCalculadorNotaEvaluaciones();
+                
+                actualizaCalculados();
+                actualizaBotonesAnadirTrabajos();
+                
+                $(".colapsable").each( function(number,elem){
+                    convertirEnLlaveExpandible(elem);
                 });
                 
-                var llave = $("<div>{</div>").toggleClass( "llave-expandible" );
-                
-                $(id).after(contenedorLlave);
-                $(id).toggleClass("oculto-por-llave");
-                contenedorLlave.append(llave);
-                contenedorLlave.append($(id));
-                
-                llave.click( function(){
-                    console.log("click en llave" );
-                    $(id).toggleClass( "oculto-por-llave" );
-                });
             }
+            
+	
             
             $(document).ready(ready);
             

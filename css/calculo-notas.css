@@ -3,8 +3,27 @@
 }
 
 
+.colapsable{
+    border-left-width: 2px;
+    border-left-color: black;
+    border-left-style: solid;
+}
+
 input{
-    background-color: #cccccc;
+    background-color: transparent;
+    
+    width: 42;
+    
+    border-bottom-width: 3px;
+    border-bottom-color: black;
+    border-bottom-style: dotted;
+    
+    border-left-width: 0px;
+    border-left-style: dotted;
+    border-left-color: black;
+    
+    border-right-width: 0px;
+    border-top-width: 0px;
 }
 
 .texto-explicacion{
@@ -14,15 +33,15 @@ input{
 
 .texto-explicacion.explicacion-visible{
     display: block;
+    position: fixed;
 }
 
-.explicacion{
+.explicacion, .texto-explicacion{
     background-color: yellow;
 }
 
 input.calculado{
-    border: 0px;
-    background-color: #bbbbbb;
+    border-bottom-style: solid;
 }
 
 .evaluacion{
@@ -45,6 +64,7 @@ input.calculado{
     border-width: 2px;
     margin: 2px;
     padding: 2px;
+    resize: vertical;
 }
 
 
