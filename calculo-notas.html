@@ -248,7 +248,7 @@
                         "class": "contenedor-llave-expandible"
                     });
 
-                    var llave = $("<div>{</div>").toggleClass( "llave-expandible" );
+                    var llave = $("<div>+</div>").toggleClass( "llave-expandible" );
 
                     $(id).after(contenedorLlave);
                     $(id).toggleClass("oculto-por-llave");
@@ -256,10 +256,16 @@
                     contenedorLlave.append($(id));
 
                     llave.click( function(){
-                        muestraOcultaLlave(id);
+                        muestraOcultaLlave(llave,id);
                     });
 
-                    function muestraOcultaLlave(elem){
+                    function muestraOcultaLlave(llave,elem){
+                        if( llave.html() == "+" ){
+                            llave.html("-");
+                        }
+                        else{
+                            llave.html("+");
+                        }
                         // TO DO: UTILIZAR JQUERYUI
                         $(elem).toggleClass( "oculto-por-llave" );
                     }
@@ -298,33 +304,31 @@
 
             <div class="total">
                 <label>Nota del módulo</label>
+                <div class="explicacion-modulo explicacion">
+                </div>
                 <input class="nota calculado modulo-total" type="number"/>
             </div>
 
-            <div class="explicacion-modulo explicacion">
-            </div>
 
             <div class="calculo-modulo colapsable">
                 <div class="evaluacion">
 
                     <div class="total">
                         <label>Nota de la evaluación 1</label>
+                        <div class="explicacion-evaluacion explicacion">
+                        </div>
                         <input class="nota calculado evaluacion-total" type="number"/>
-                    </div>
-
-                    <div class="explicacion-evaluacion explicacion">
                     </div>
 
                     <div class="calculo-total colapsable">
 
                         <div class="examenes">
                             <div class="total">
-                                <label>Nota de exámenes</label>	
+                                <label>Nota de exámenes</label>
+                                <div class="explicacion-examenes explicacion"></div>
                                 <input class="nota calculado evaluacion-examenes" type="number"/>
                             </div>
 
-                            <div class="explicacion-examenes explicacion">
-                            </div>
 
                             <div class="calculo-examenes colapsable">    
 
@@ -347,6 +351,8 @@
                                     <label>Recuperación</label>
                                     <input class="nota evaluacion-examenes-recuperacion" type="number"/>
                                 </div>
+                                
+                                <!--div class="nofloat">&nbsp;</div-->
                             </div>
 
                         </div>
@@ -355,11 +361,10 @@
 
                             <div class="total">
                                 <label>Nota de trabajos</label>
+                                <div class="explicacion-trabajos explicacion">
+                                </div>    
                                 <input class="nota calculado evaluacion-trabajos" type="number"/>
                             </div>
-
-                            <div class="explicacion-trabajos explicacion">
-                            </div>    
 
                             <div  class="calculo-trabajos colapsable">
                                 <div class="nuevo-trabajo">+trabajo</div>
@@ -370,10 +375,9 @@
                         <div class="actitud">
                             <div class="total">
                                 <label>Nota de actitud</label>
+                                <div class="explicacion-actitud explicacion"></div>
                                 <input class="nota evaluacion-actitud" type="number" />
                             </div>
-
-                            <div class="explicacion-actitud explicacion"></div>
 
                         </div>
 

@@ -3,11 +3,8 @@
 }
 
 
-.colapsable{
-    border-left-width: 2px;
-    border-left-color: black;
-    border-left-style: solid;
-}
+
+
 
 input{
     background-color: transparent;
@@ -40,34 +37,69 @@ input{
     background-color: yellow;
 }
 
+.calculo-examenes{
+    clear:both;
+}
+
 input.calculado{
     border-bottom-style: solid;
 }
 
 .evaluacion{
-    border-style: solid;
-    border-width: 10px;
     margin: 10px;
     padding: 10px;
 }
 
 .examenes, .trabajos, .actitud{
-    border-style: solid;
     margin: 5px;
-    border-width: 5px;
     padding: 5px;
 }
 
+
 .llave-expandible{
-    display: inline;
-    border-style: dashed;
-    border-width: 2px;
-    margin: 2px;
-    padding: 2px;
-    resize: vertical;
+    
+    padding: 5px;
+    
+    display: inline-block;
+    border-left-width: 2px;
+    border-left-color: black;
+    border-left-style: solid;
+
+    border-top-width: 2px;
+    border-top-color: black;
+    border-top-style: solid;
+
+    border-bottom-width: 2px;
+    border-bottom-color: black;
+    border-bottom-style: solid;
+    
 }
 
+.colapsable{
+    border-left-width: 2px;
+    border-left-color: black;
+    border-left-style: solid;
+
+
+    border-top-width: 2px;
+    border-top-color: black;
+    border-top-style: solid;
+
+    border-bottom-width: 2px;
+    border-bottom-color: black;
+    border-bottom-style: solid;
+
+    padding: 5px;
+    
+    float: right;
+}
 
 .oculto-por-llave{
     display: none;
+}
+
+
+.parcial, .final, .recuperacion{
+    float: right;
+    clear: both;
 }
