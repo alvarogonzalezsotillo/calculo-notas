@@ -50,9 +50,14 @@ input{
     border-color: white;
 }
 
-.explicacion, .texto-explicacion{
-    background-color: yellow;
+.explicacion{
     cursor: help;
+    background-color: yellow;
+}
+
+.texto-explicacion{
+    background-color: yellow;
+    z-index: 10;
 }
 
 .calculo-examenes{
