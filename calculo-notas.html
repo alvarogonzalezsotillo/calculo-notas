@@ -29,18 +29,18 @@
                     "Si alguna evaluación puntua por debajo de 5, la nota máxima será un 4."
 
                 var explicacionEvaluacion = "La nota de la evaluación se calcula a partir de las notas de los " +
-                    "exámenes, trabajos y actitud. Es una suma poderada en la que los exámenes cuentan un 65%," +
+                    "exámenes, trabajos y actitud. Es una suma poderada en la que los exámenes cuentan un 65%, " +
                     " los trabajos un 30% y la actitud un 5%";
 
-                var explicacionExamenes = "Si se tiene más de un 3,5 en cada parcial, se calcula su media." +
-                            "La nota será la media de los parciales o la del final, la que sea mayor." +
-                            "Si se suspendiera la evaluación, en Junio habría una recuperación de la parte de exámenes de la nota." +
-                            "(Los trabajos podrían recuperarse volviendo a entregarlos con los fallos corregidos).";
+                var explicacionExamenes = "Si se tiene más de un 3,5 en cada parcial, se calcula su media. " +
+                            "La nota será la media de los parciales o la del final, la que sea mayor. " +
+                            "Si se suspendiera la evaluación, en Junio habría una recuperación de la parte de exámenes de la nota. " +
+                            "(Los trabajos podrían recuperarse volviendo a entregarlos con los fallos corregidos). ";
 
-                var explicacionTrabajos = "En cada evaluación habrá una cantidad variable de trabajos (al menos uno). La nota de los trabajos será la" +
-                        "media de las notas obtenidas." +
-                        "Para recuperar un trabajo, se deberá entregar de nuevo con los errores corregidos. Se avisará al profesor" +
-                        "de qué trabajos se han reenviado el día del examen final de la evaluación. Un trabajo entregado tarde, o un" +
+                var explicacionTrabajos = "En cada evaluación habrá una cantidad variable de trabajos (al menos uno). La nota de los trabajos será la " +
+                        "media de las notas obtenidas. " +
+                        "Para recuperar un trabajo, se deberá entregar de nuevo con los errores corregidos. Se avisará al profesor " +
+                        "de qué trabajos se han reenviado el día del examen final de la evaluación. Un trabajo entregado tarde, o un " +
                         "trabajo reenviado para recuperar nota, puede obtener como máximo un 6 de puntuación.";
 
                 var explicacionActitud = "La actitud se determina por la proactividad y ganas de trabajar que demuestra un alumno en clase." +
@@ -63,7 +63,11 @@
                         }).html(explicacion);
                         $(elem).append(textoExplicacion);
 
-                        toggle.click( function(){
+                        toggle.mouseenter(function(){
+                            muestraOcultaTextoExplicacion(textoExplicacion);
+                        });
+                        
+                        toggle.mouseleave(function(){
                             muestraOcultaTextoExplicacion(textoExplicacion);
                         });
 

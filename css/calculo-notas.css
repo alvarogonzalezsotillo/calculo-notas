@@ -31,10 +31,28 @@ input{
 .texto-explicacion.explicacion-visible{
     display: block;
     position: fixed;
+    max-width: 300px;
+    padding: 5px;
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
+    border-top-right-radius: 7px;
+    --border-top-left-radius: 7px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: white;
+    
+}
+
+.toggle-explicacion{
+    padding: 2px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: white;
 }
 
 .explicacion, .texto-explicacion{
     background-color: yellow;
+    cursor: help;
 }
 
 .calculo-examenes{
@@ -53,8 +71,16 @@ input.calculado{
 .examenes, .trabajos, .actitud{
     margin: 5px;
     padding: 5px;
+    
 }
 
+label{
+    min-width: 150px;
+    resize: both;
+    text-align: right;
+    display: inline-block;
+    text-overflow: ellipsis;
+}
 
 .llave-expandible{
     
@@ -72,7 +98,12 @@ input.calculado{
     border-bottom-width: 2px;
     border-bottom-color: black;
     border-bottom-style: solid;
+
+    border-bottom-left-radius: 4px;
+
     
+    background-color: yellow;
+    cursor: pointer;
 }
 
 .colapsable{
@@ -89,6 +120,14 @@ input.calculado{
     border-bottom-color: black;
     border-bottom-style: solid;
 
+    border-right-width: 2px;
+    border-right-color: black;
+    border-right-style: solid;
+    
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
+    border-top-right-radius: 7px;
+    
     padding: 5px;
     
     float: right;
@@ -98,8 +137,3 @@ input.calculado{
     display: none;
 }
 
-
-.parcial, .final, .recuperacion{
-    float: right;
-    clear: both;
-}
