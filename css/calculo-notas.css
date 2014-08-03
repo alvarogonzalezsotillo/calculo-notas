@@ -39,15 +39,19 @@ input{
     --border-top-left-radius: 7px;
     border-width: 1px;
     border-style: solid;
-    border-color: white;
-    
+    border-color: yellow;
+
+    box-shadow: 0 0 5px #aaa;
+
 }
 
 .toggle-explicacion{
     padding: 2px;
     border-width: 1px;
     border-style: solid;
-    border-color: white;
+    border-color: yellow;
+    
+    box-shadow: 0 0 5px #aaa;
 }
 
 .explicacion{
@@ -109,6 +113,9 @@ label{
     
     background-color: yellow;
     cursor: pointer;
+    
+    box-shadow: 0 0 5px #aaa;
+
 }
 
 .colapsable{
@@ -136,6 +143,9 @@ label{
     padding: 5px;
     
     float: right;
+
+    box-shadow: 0 0 5px #aaa;
+
 }
 
 .oculto-por-llave{
