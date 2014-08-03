@@ -122,6 +122,29 @@
                 $(".evaluacion-actitud").change(listener);
             }
 
+            function registraCalculadorNotaModulo(){
+            
+                function calculaNotaModulo(){
+                    var evaluaciones = $(".evaluacion-total");
+                    var numero = evaluaciones.size();
+                    var suma = 0;
+                    var aprobadasTodas = true;
+                    evaluaciones.each( function(number,elem){
+                        var v = parseFloat( $(elem).val() ) || 0;
+                        if( v < 5 ){
+                            aprobadasTodas = false;
+                        }
+                        suma += v;
+                    });
+                    var notaModulo = suma/numero;
+                    if( !aprobadasTodas ){
+                        notaModulo = Math.min(4,notaModulo);
+                    }
+                    $(".modulo-total").val(notaModulo);
+                }
+
+                $(".evaluacion-total").change(calculaNotaModulo);
+            }
             
             
             function actualizaBotonesAnadirTrabajos(){
@@ -283,6 +306,7 @@
 				
                 registraCalculadorNotaExamenes();
                 registraCalculadorNotaEvaluaciones();
+                registraCalculadorNotaModulo();
                 
                 actualizaCalculados();
                 actualizaBotonesAnadirTrabajos();
