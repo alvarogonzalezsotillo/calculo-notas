@@ -106,7 +106,6 @@
                         var id = elems[i];
                         var val = $(id,$(evaluacion)).val();
                         var v = parseFloat( val ) || 0;
-                        console.log( id + ":" + val + ":" + v );
                         suma = suma + v*percentage[i];
                     }
                     $(".evaluacion-total",evaluacion ).val(suma).change();
@@ -154,17 +153,14 @@
                     var notaEvaluacionTrabajos = $(".evaluacion-trabajos",trabajos);
                     var notasTrabajos = $(".nota-trabajo",trabajos); 
                     var cantidad = notasTrabajos.length;
-                    console.log("cantidad:" + cantidad);
                     var suma = 0;
                     notasTrabajos.each( function(number,element){
                         var v = parseFloat(element.value);  
                         v = isNaN(v) ? 0 : v;
-                        console.log( number + " " + v );
                         suma = suma + v;
                     });
                     var nota = suma/cantidad;
                     
-                    console.log( "nota de trabajos:" + nota );
                     notaEvaluacionTrabajos.val(suma/cantidad).change();
                 }
 
@@ -232,7 +228,6 @@
                         var p1 = parseFloat( parciales.get(0).value ) || 0;
                         var p2 = parseFloat( parciales.get(1).value ) || 0;
                         
-                        console.log( "p1:" + p1 + "  p2:" + p2 + "  finalV:" + finalV + "  recuperacionV:" + recuperacionV );
                         var mediaP = (p1 + p2)/2;
                         var nota = mediaP;
                         var valeMediaP = mediaP >= 5.0;
@@ -247,7 +242,6 @@
                         }
 
                         nota = Math.max(nota,recuperacionV);
-                        console.log( "nota:" + nota );
 
                         total.val(nota).change();
                     }
@@ -261,13 +255,71 @@
             }
             
             
+
+            function esMismoHTMLElement( jq1, jq2 ){
+                var o1 = $(jq1);
+                var o2 = $(jq2);
+
+                if( o1.size() != 1 ){
+                    throw "Solo se admite un elemento en jq1";
+                }
+
+                if( o2.size() != 1 ){
+                    throw "Solo se admite un elemento en jq2";
+                }
+
+                return o1.get(0) == o2.get(0);
+
+            }
+
             
     
+            function toLog( jq ){
+                var o = $(jq);
+                return o.html() + " -- " + o.prop("class");
+            }
+            
+            function buscaPrimeroEnHijosDePadres(jq,selector,original ){
+                
+                
+                
+                function esPadreDe( padre, hijo ){
+                    
+                    
+                    var padres = $(hijo).parents();
+                    for( var i = 0 ; i < padres.size(); i++ ){
+                        var p = padres.get(i);
+                        if( esMismoHTMLElement(p,padre) ){
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+                
+                var sib = $(jq).siblings();
+                for( var s = 0 ; s < sib.size() ; s++ ){
+                    var sibling = sib.get(s);
+                    var found = $(sibling).find(selector);
+                    if( found.size() != 0 ){
+                        if( !esPadreDe( original, found ) ){
+                            return found;
+                        }
+                    }
+                }
+
+                var parent = $(jq).parent();
+                if( parent.size() != 0 ){
+                    return buscaPrimeroEnHijosDePadres(parent,selector,original);
+                }
+                return null;
+            }
                     
             function ready(){
 
                 function actualizaCalculados(){
-                    $(".calculado").prop( "readonly", "readonly" )
+                    console.log("Actualizando calculados" );
+                    $("input").removeProp("readonly");
+                    $("input.calculado").prop( "readonly", "readonly" );
                 }
 
                 function convertirEnLlaveExpandible(id){
@@ -275,10 +327,10 @@
                         "class": "contenedor-llave-expandible"
                     });
 
-                    var llave = $("<div>+</div>").toggleClass( "llave-expandible" );
+                    var llave = $("<div>-</div>").toggleClass( "llave-expandible" );
 
                     $(id).after(contenedorLlave);
-                    $(id).toggleClass("oculto-por-llave");
+                    $(id).addClass("oculto-por-llave");
                     contenedorLlave.append(llave);
                     contenedorLlave.append($(id));
 
@@ -286,17 +338,42 @@
                         muestraOcultaLlave(llave,id);
                     });
 
+                    function actualizaTotalCalculado(llave){
+                        $("input").change();
+                    }
+                    
                     function muestraOcultaLlave(llave,elem){
-                        if( llave.html() == "+" ){
-                            llave.html("-");
+                        var delay = 200;
+                        var total = buscaPrimeroEnHijosDePadres(llave,".nota",llave.parent() );
+                        console.log( "total de llave:" + total.prop("class") );
+                        if( llave.html() == "-" ){
+                            llave.html("+");
+                            llave.addClass("llave-cerrada" );
+                            $(elem).addClass("oculto-por-llave");
+                            $(elem).hide(delay);
+                            total.removeClass("calculado");
                         }
                         else{
-                            llave.html("+");
+                            llave.html("-");
+                            llave.removeClass("llave-cerrada" );
+                            $(elem).removeClass("oculto-por-llave");
+                            $(elem).show(delay);
+                            total.addClass("calculado");
                         }
-                        // TO DO: UTILIZAR JQUERYUI
-                        $(elem).toggleClass( "oculto-por-llave" );
+                    
+                        actualizaCalculados();
+                        actualizaTotalCalculado(llave);
                     }
+                    
+                    muestraOcultaLlave(llave,id);
                 }
+
+                function actualizaLlavesExpandibles(){
+                    $(".colapsable").each( function(number,elem){
+                        convertirEnLlaveExpandible(elem);
+                    });
+                }
+
                 
                 aseguraNumeroEvaluaciones(3);
                 
@@ -311,9 +388,7 @@
                 actualizaCalculados();
                 actualizaBotonesAnadirTrabajos();
                 
-                $(".colapsable").each( function(number,elem){
-                    convertirEnLlaveExpandible(elem);
-                });
+                actualizaLlavesExpandibles();
                 
             }
             
