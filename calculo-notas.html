@@ -77,7 +77,8 @@
                 
                 function muestraOcultaTextoExplicacion(elem){
                     // TO DO: UTILIZAR JQUERYUI
-                    $(elem).toggleClass("explicacion-visible");
+                    //$(elem).toggleClass("explicacion-visible");
+                    $(elem).toggle(200);
                 }
 
                 convertirEnExplicacion(".explicacion-examenes",explicacionExamenes);
@@ -318,8 +319,17 @@
 
                 function actualizaCalculados(){
                     console.log("Actualizando calculados" );
-                    $("input").removeProp("readonly");
-                    $("input.calculado").prop( "readonly", "readonly" );
+                    setTimeout( function(){
+                        var inp = $("input.calculado"); 
+                        console.log( "Pongo readonly:" + inp.size() );
+                        inp.prop( "readonly", "readonly" );
+                    }, 1000 );
+                    setTimeout( function(){
+                        var inp = $('input:not(".calculado")');
+                        console.log( "Quito readonly:" + inp.size() );
+                        inp.removeProp("readonly");
+                    }, 2000 );
+                    
                 }
 
                 function convertirEnLlaveExpandible(id){
@@ -417,7 +427,7 @@
                 <div class="evaluacion">
 
                     <div class="total">
-                        <label>Nota de la evaluación 1</label>
+                        <label>Nota de la evaluación <span class="autonumerico-evaluacion"></span> </label>
                         <div class="explicacion-evaluacion explicacion">
                         </div>
                         <input class="nota calculado evaluacion-total" type="number"/>

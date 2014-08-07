@@ -3,6 +3,14 @@
 }
 
 
+body{
+    counter-reset: evaluacion;
+}
+
+.autonumerico-evaluacion:before{
+    counter-increment: evaluacion;
+    content: counter(evaluacion);
+}
 
 
 
@@ -30,10 +38,6 @@ input.calculado{
 
 .texto-explicacion{
     display: none;
-}
-
-.texto-explicacion.explicacion-visible{
-    display: block;
     position: fixed;
     max-width: 300px;
     padding: 5px;
@@ -45,8 +49,13 @@ input.calculado{
     border-style: solid;
     border-color: yellow;
 
-    box-shadow: 0 0 5px #050505;
+    /* box-sadow: inset [offsetx offsety blur spread color] */
+    box-shadow: 0 0 5px #aaa;
+}
 
+
+.texto-explicacion.explicacion-visible{
+    display: block;
 }
 
 .toggle-explicacion{
@@ -125,6 +134,10 @@ label{
     border-right-style: solid;
 }
 
+.llave-expandible:hover{
+   box-shadow:0px 0px 10px 5px #aaa;
+}
+
 .colapsable{
     border-left-width: 2px;
     border-left-color: black;
@@ -152,6 +165,8 @@ label{
     float: right;
 
     box-shadow: 0 0 5px #aaa;
+    
+    z-index:10;
 }
 
 
