@@ -2,7 +2,6 @@
     display: inline-block;
 }
 
-
 body{
     counter-reset: evaluacion;
 }
@@ -127,6 +126,8 @@ label{
     box-shadow: 0 0 5px #aaa;
 
 }
+
+
 
 .llave-expandible.llave-cerrada{
     border-right-width: 2px;
