@@ -1,6 +1,12 @@
-.total, .colapsable, .explicacion, .contenedor-llave-expandible{
+.total, .colapsable, .explicacion{
     display: inline-block;
 }
+
+.total{
+    vertical-align: top;
+}
+
+
 
 body{
     counter-reset: evaluacion;
@@ -123,6 +129,8 @@ label{
     background-color: yellow;
     cursor: pointer;
     
+    vertical-align: top;
+    
     box-shadow: 0 0 5px #aaa;
 
 }
@@ -163,7 +171,6 @@ label{
     
     padding: 5px;
     
-    float: right;
 
     box-shadow: 0 0 5px #aaa;
     
