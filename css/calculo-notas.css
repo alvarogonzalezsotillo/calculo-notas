@@ -135,7 +135,25 @@ label{
 
 }
 
+.llave-expandible.abajo{
+    border-left-width: 2px;
+    border-left-color: black;
+    border-left-style: solid;
 
+    border-top-width: 2px;
+    border-top-color: black;
+    border-top-style: solid;
+
+    border-right-width: 2px;
+    border-right-color: black;
+    border-right-style: solid;
+    
+    
+    border-bottom-width: 0px;
+
+    border-bottom-left-radius: 0px;
+    border-top-right-radius: 4px;
+}
 
 .llave-expandible.llave-cerrada{
     border-right-width: 2px;
