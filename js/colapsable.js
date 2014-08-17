@@ -1,64 +1,11 @@
 var Colapsable = (function () {
   
     
+    function logg(o){
+        //console.log(o);
+    }
     
     var escuchadoresColapsable = [];
-    
-    function buscaPrimeroEnHijosDePadres(jq, selector, original) {
-
-
-        function esMismoHTMLElement( jq1, jq2 ){
-            var o1 = $(jq1);
-            var o2 = $(jq2);
-
-            if( o1.size() != 1 ){
-                throw "Solo se admite un elemento en jq1:" + o1.size() + " -- " + jq1;
-            }
-
-            if( o2.size() != 1 ){
-                throw "Solo se admite un elemento en jq2:" + o2.size() + " -- " + jq2;
-            }
-
-            return o1.get(0) == o2.get(0);
-
-        }
-
-
-        function esPadreDe( padre, hijo ){
-
-            console.log( "esPadreDe:" );
-            console.log( "  padre:" + toLog(padre) );
-            console.log( "  hijo:" + toLog(hijo) );
-
-            var padres = $(hijo).parents();
-            for( var i = 0 ; i < padres.size(); i++ ){
-                var p = padres.get(i);
-                if( esMismoHTMLElement(p,padre) ){
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        var sib = $(jq).siblings();
-        for( var s = 0 ; s < sib.size() ; s++ ){
-            var sibling = sib.get(s);
-            var found = $(sibling).find(selector);
-            for( var i = 0 ; i < found.size() ; i++ ){
-                var f = found.get(i);
-                if( !esPadreDe( original, f ) ){
-                    return f;
-                }
-            }
-        }
-
-        var parent = $(jq).parent();
-        if( parent.size() != 0 ){
-            return buscaPrimeroEnHijosDePadres(parent,selector,original);
-        }
-        return null;
-    }
-
     
     
     function convertirEnLlaveExpandible(id){
@@ -101,28 +48,24 @@ var Colapsable = (function () {
             var lbb = $(llave).offset();
             var ebb = $(elem).offset();
 
-            console.log( "llave lbb: top" + lbb.top + " -- left:" + lbb.left );
-            console.log( "elem  ebb: top" + ebb.top + " -- left:" + ebb.left );
+            logg( "llave lbb: top" + lbb.top + " -- left:" + lbb.left );
+            logg( "elem  ebb: top" + ebb.top + " -- left:" + ebb.left );
 
             if( lbb.top < ebb.top ){
-                console.log( "add abajo" );
+                logg( "add abajo" );
                 $(llave).addClass( "abajo" );
             }
             else{
-                console.log( "remove abajo" );
+                logg( "remove abajo" );
                 $(llave).removeClass( "abajo" );
             }
         }
 
         function muestraOcultaLlave(llave,elem){
             var delay = 200;
-            var total = buscaPrimeroEnHijosDePadres(llave,".nota",llave.parent() );
-            total = $(total);
-            console.log("total:" + total );
-            console.log( "total de llave:" + total.prop("class") );
 
             var yaCambiado = function(){
-                console.log( "tras abrir o cerrar llave" );
+                logg( "tras abrir o cerrar llave" );
                 actualizaOrientacionDeTodasLasLlaves();
             }
 
@@ -131,17 +74,16 @@ var Colapsable = (function () {
                 llave.addClass("llave-cerrada" );
                 $(elem).addClass("oculto-por-llave");
                 $(elem).hide(delay,yaCambiado);
-                total.removeClass("calculado");
             }
             else{
                 llave.html("-");
                 llave.removeClass("llave-cerrada" );
                 $(elem).removeClass("oculto-por-llave");
                 $(elem).show(delay,yaCambiado);
-                total.addClass("calculado");
             }
 
-            
+
+            console.log( "Escuchadores:" + escuchadoresColapsable.length );
             for( var i in escuchadoresColapsable ){
                 escuchadoresColapsable[i](llave);
             }
@@ -165,7 +107,7 @@ var Colapsable = (function () {
     return {
         actualizaLlavesExpandibles : actualizaLlavesExpandibles,
         avisaColapsadoExpandido : function( handler ){
-            escuchadoresColapsable.push(handle);    
+            escuchadoresColapsable.push(handler);    
         }
         
     };

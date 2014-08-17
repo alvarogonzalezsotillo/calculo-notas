@@ -241,6 +241,15 @@
                 return o.html() + " -- " + o.prop("class");
             }
             
+            function campoTotalDeLlave(llave){
+                var divTotal = $(llave).prev();
+                var input = $("input",divTotal);
+                if( input.size() != 1 ){
+                    throw "Esperaba solo uno:" + toLog(input);
+                }
+                console.log( "campo input:" + toLog(input) );
+                return input.first();
+            }
                     
             function ready(){
 
@@ -271,7 +280,16 @@
                 
                 
                 function actualizaTotalCalculado(llave){
+                    llave = $(llave);
+                    var input = campoTotalDeLlave(llave);
+                    if( llave.hasClass( "llave-cerrada" ) ){
+                        input.removeClass( "calculado" );
+                    }
+                    else{
+                        input.addClass( "calculado" );
+                    }
                     $("input").change();
+                    actualizaCalculados();
                 }
                 
                 
@@ -280,7 +298,6 @@
                 Colapsable.actualizaLlavesExpandibles();
                 Colapsable.avisaColapsadoExpandido( function(llave){
                     actualizaTotalCalculado(llave);
-                    actualizaCalculados();
                 });
                 
             }
@@ -302,7 +319,7 @@
                 <label>Nota del módulo</label>
                 <div class="explicacion-modulo explicacion">
                 </div>
-                <input class="nota calculado modulo-total" type="number"/>
+                <input class="nota modulo-total" type="number"/>
             </div>
 
 
@@ -313,7 +330,7 @@
                         <label>Nota de la evaluación <span class="autonumerico-evaluacion"></span> </label>
                         <div class="explicacion-evaluacion explicacion">
                         </div>
-                        <input class="nota calculado evaluacion-total" type="number"/>
+                        <input class="nota evaluacion-total" type="number"/>
                     </div>
 
                     <div class="calculo-total colapsable">
@@ -322,7 +339,7 @@
                             <div class="total">
                                 <label>Nota de exámenes</label>
                                 <div class="explicacion-examenes explicacion"></div>
-                                <input class="nota calculado evaluacion-examenes" type="number"/>
+                                <input class="nota evaluacion-examenes" type="number"/>
                             </div>
 
 
@@ -359,7 +376,7 @@
                                 <label>Nota de trabajos</label>
                                 <div class="explicacion-trabajos explicacion">
                                 </div>    
-                                <input class="nota calculado evaluacion-trabajos" type="number"/>
+                                <input class="nota evaluacion-trabajos" type="number"/>
                             </div>
 
                             <div  class="calculo-trabajos colapsable">
