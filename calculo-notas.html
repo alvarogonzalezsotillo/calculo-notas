@@ -9,6 +9,10 @@
 
         <script type="text/javascript" src="js/jquery-ui-1.10.4.js">
         </script>
+
+        <script type="text/javascript" src="js/colapsable.js">
+        </script>
+
         
         <link href="css/calculo-notas.css"rel="stylesheet" />
 		<link href="css/ui-lightness/jquery-ui-1.10.4.css" rel="stylesheet" />
@@ -257,22 +261,6 @@
             
             
 
-            function esMismoHTMLElement( jq1, jq2 ){
-                var o1 = $(jq1);
-                var o2 = $(jq2);
-
-                if( o1.size() != 1 ){
-                    throw "Solo se admite un elemento en jq1:" + o1.size() + " -- " + jq1;
-                }
-
-                if( o2.size() != 1 ){
-                    throw "Solo se admite un elemento en jq2:" + o2.size() + " -- " + jq2;
-                }
-
-                return o1.get(0) == o2.get(0);
-
-            }
-
             
     
             function toLog( jq ){
@@ -280,44 +268,6 @@
                 return o.html() + " -- " + o.prop("class");
             }
             
-            function buscaPrimeroEnHijosDePadres(jq,selector,original ){
-                
-                
-                
-                function esPadreDe( padre, hijo ){
-                    
-                    console.log( "esPadreDe:" );
-                    console.log( "  padre:" + toLog(padre) );
-                    console.log( "  hijo:" + toLog(hijo) );
-                    
-                    var padres = $(hijo).parents();
-                    for( var i = 0 ; i < padres.size(); i++ ){
-                        var p = padres.get(i);
-                        if( esMismoHTMLElement(p,padre) ){
-                            return true;
-                        }
-                    }
-                    return false;
-                }
-                
-                var sib = $(jq).siblings();
-                for( var s = 0 ; s < sib.size() ; s++ ){
-                    var sibling = sib.get(s);
-                    var found = $(sibling).find(selector);
-                    for( var i = 0 ; i < found.size() ; i++ ){
-                        var f = found.get(i);
-                        if( !esPadreDe( original, f ) ){
-                            return f;
-                        }
-                    }
-                }
-
-                var parent = $(jq).parent();
-                if( parent.size() != 0 ){
-                    return buscaPrimeroEnHijosDePadres(parent,selector,original);
-                }
-                return null;
-            }
                     
             function ready(){
 
@@ -331,56 +281,6 @@
                 }
 
                     
-                function convertirEnLlaveExpandible(id){
-
-                    var llave = $("<div>-</div>").toggleClass( "llave-expandible" );
-
-                    $(id).addClass("oculto-por-llave");
-                    llave.insertBefore($(id));
-                    
-
-                    llave.click( function(){
-                        muestraOcultaLlave(llave,id);
-                    });
-
-                    function actualizaTotalCalculado(llave){
-                        $("input").change();
-                    }
-                    
-                    function muestraOcultaLlave(llave,elem){
-                        var delay = 200;
-                        var total = buscaPrimeroEnHijosDePadres(llave,".nota",llave.parent() );
-                        total = $(total);
-                        console.log("total:" + total );
-                        console.log( "total de llave:" + total.prop("class") );
-                        if( llave.html() == "-" ){
-                            llave.html("+");
-                            llave.addClass("llave-cerrada" );
-                            $(elem).addClass("oculto-por-llave");
-                            $(elem).hide(delay);
-                            total.removeClass("calculado");
-                        }
-                        else{
-                            llave.html("-");
-                            llave.removeClass("llave-cerrada" );
-                            $(elem).removeClass("oculto-por-llave");
-                            $(elem).show(delay);
-                            total.addClass("calculado");
-                        }
-                    
-                        actualizaCalculados();
-                        actualizaTotalCalculado(llave);
-                    }
-                    
-                    muestraOcultaLlave(llave,id);
-                }
-
-                
-                function actualizaLlavesExpandibles(){
-                    $(".colapsable").each( function(number,elem){
-                        convertirEnLlaveExpandible(elem);
-                    });
-                }
 
                 
                 aseguraNumeroEvaluaciones(3);
@@ -396,7 +296,19 @@
                 actualizaCalculados();
                 actualizaBotonesAnadirTrabajos();
                 
-                actualizaLlavesExpandibles();
+                
+                function actualizaTotalCalculado(llave){
+                    $("input").change();
+                }
+                
+                
+
+                
+                Colapsable.actualizaLlavesExpandibles();
+                Colapsable.avisaColapsadoExpandido( function(llave){
+                    actualizaTotalCalculado(llave);
+                    actualizaCalculados();
+                });
                 
             }
             

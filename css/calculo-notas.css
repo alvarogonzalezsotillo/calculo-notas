@@ -124,6 +124,7 @@ label{
     border-bottom-style: solid;
 
     border-bottom-left-radius: 4px;
+    border-top-left-radius: 4px;
 
     
     background-color: yellow;
@@ -136,23 +137,17 @@ label{
 }
 
 .llave-expandible.abajo{
-    border-left-width: 2px;
-    border-left-color: black;
-    border-left-style: solid;
-
-    border-top-width: 2px;
-    border-top-color: black;
-    border-top-style: solid;
 
     border-right-width: 2px;
     border-right-color: black;
     border-right-style: solid;
     
-    
     border-bottom-width: 0px;
 
+    
     border-bottom-left-radius: 0px;
     border-top-right-radius: 4px;
+    border-top-left-radius: 4px;
 }
 
 .llave-expandible.llave-cerrada{
@@ -160,6 +155,13 @@ label{
     border-right-color: black;
     border-right-style: solid;
 }
+
+.llave-expandible.llave-cerrada.abajo{
+    border-bottom-width: 2px;
+    border-bottom-color: black;
+    border-bottom-style: solid;
+}
+
 
 .llave-expandible:hover{
    box-shadow:0px 0px 10px 5px #aaa;
