@@ -7,7 +7,6 @@ var Colapsable = (function () {
     function buscaPrimeroEnHijosDePadres(jq, selector, original) {
 
 
-
         function esMismoHTMLElement( jq1, jq2 ){
             var o1 = $(jq1);
             var o2 = $(jq2);
@@ -70,11 +69,19 @@ var Colapsable = (function () {
         llave.insertBefore($(id));
 
         function llaveDeColapsable(id){
-            return $(id).next();
+            var ret = $(id).prev();
+            if( !ret.hasClass("llave-expandible") ){
+                throw "La llave no tiene la clase adecuada:" + ret.prop("class");
+            }
+            return ret;
         }
 
         function colapsableDeLlave(llave){
-            return $(llave).prev();
+            var ret = $(llave).next();
+            if( !ret.hasClass("colapsable") ){
+                throw "El colapsable no tiene la clase adecuada:" + ret.prop("class");
+            }
+            return ret;
         }
 
         function actualizaOrientacionDeTodasLasLlaves(){
