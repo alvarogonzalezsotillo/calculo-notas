@@ -1,0 +1,72 @@
+<html>
+
+    <head>
+        
+        <meta charset="utf-8"> 
+
+        <script type="text/javascript" src="js/jquery-1.10.2.js">
+        </script>
+
+        <script type="text/javascript" src="js/jquery-ui-1.10.4.js">
+        </script>
+
+        <script type="text/javascript" src="js/colapsable.js">
+        </script>
+
+        <script type="text/javascript" src="js/explicacion.js">
+        </script>
+
+        <script type="text/javascript" src="js/autocreacion.js">
+        </script>
+
+        
+        <link href="css/calculo-notas.css"rel="stylesheet" />
+		<link href="css/ui-lightness/jquery-ui-1.10.4.css" rel="stylesheet" />
+        
+        <script type="text/javascript">
+
+        
+            function ready(){
+
+                
+                
+                Colapsable.actualizaLlavesExpandibles();
+
+                var templateElem = $(".trabajo").first();
+                var fieldSelector = "input.nota";
+                var classToRemove = "trabajo-por-crear";
+                
+                
+                Autocreacion.autocreacion(templateElem,fieldSelector,classToRemove);
+            }
+            
+            $(document).ready(ready);
+
+        
+        </script>
+    </head>
+    
+    <body>
+    
+        <div class="trabajos">
+
+            <div class="total">
+                <label>Nota de trabajos</label>
+                <div class="explicacion-trabajos explicacion">
+                </div>    
+                <input class="nota evaluacion-trabajos" type="number"/>
+            </div>
+
+            <div class="calculo-trabajos colapsable">
+                <div class="trabajo trabajo-por-crear">
+                    <label class="estrecho">Trabajo <span class="autonumerico-trabajo"></span></label>
+                    <input class="nota nota-trabajo" type="number"/>
+                </div>
+            </div>
+
+        </div>
+        
+    
+    </body>
+    
+</html>

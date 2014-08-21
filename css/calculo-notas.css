@@ -17,6 +17,14 @@ body{
     content: counter(evaluacion);
 }
 
+div.calculo-trabajos{
+    counter-reset: trabajo;
+}
+
+.autonumerico-trabajo:before{
+    counter-increment: trabajo;
+    content: counter(trabajo);
+}
 
 
 input{
@@ -201,4 +209,6 @@ label.estrecho{
     z-index:10;
 }
 
-
+.trabajo-por-crear *{
+    color: gray;
+}
