@@ -16,6 +16,9 @@
         <script type="text/javascript" src="js/explicacion.js">
         </script>
 
+        <script type="text/javascript" src="js/autocreacion.js">
+        </script>
+
         
         <link href="css/calculo-notas.css"rel="stylesheet" />
 		<link href="css/ui-lightness/jquery-ui-1.10.4.css" rel="stylesheet" />
@@ -276,7 +279,6 @@
                 registraCalculadorNotaModulo();
                 
                 actualizaCalculados();
-                actualizaBotonesAnadirTrabajos();
                 
                 
                 function actualizaTotalCalculado(llave){
@@ -288,7 +290,7 @@
                     else{
                         input.addClass( "calculado" );
                     }
-                    $("input").change();
+                    $("input",llave).first().change();
                     actualizaCalculados();
                 }
                 
@@ -299,6 +301,15 @@
                 Colapsable.avisaColapsadoExpandido( function(llave){
                     actualizaTotalCalculado(llave);
                 });
+
+                
+                var templateElem = $(".trabajo").first();
+                var fieldSelector = "input.nota";
+                var classToRemove = "trabajo-por-crear";
+                var removeSelector = ".quita-trabajo";
+                
+                //Autocreacion.autocreacion(templateElem,fieldSelector,classToRemove,removeSelector);
+                Autocreacion.actualizaAutocreaciones(".trabajo",fieldSelector,classToRemove,removeSelector);
                 
             }
             
@@ -379,13 +390,16 @@
                                 <input class="nota evaluacion-trabajos" type="number"/>
                             </div>
 
+                            
                             <div class="calculo-trabajos colapsable">
                                 <div class="trabajo trabajo-por-crear">
                                     <label class="estrecho">Trabajo <span class="autonumerico-trabajo"></span></label>
                                     <input class="nota nota-trabajo" type="number"/>
+                                    <span class="quita-trabajo">Eliminar</span>
                                 </div>
                             </div>
 
+                            
                         </div>
 
                         <div class="actitud">

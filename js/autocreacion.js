@@ -52,11 +52,8 @@ var Autocreacion = (function(){
             if( creationCallback ){
                 creationCallback(newLine);
             }
-
         }
         
-        
-
         
         $(fieldSelector,templateElem).change( fieldChanged )
         $(removeSelector,templateElem).click( function(){
@@ -66,10 +63,16 @@ var Autocreacion = (function(){
         
     }
     
-    return{
-        autocreacion: function(templateElem,fieldSelector,classToRemove,removeSelector){
-            UnaAutocreacion(templateElem,fieldSelector,classToRemove,removeSelector);
+    var ret = {
+        autocreacion: UnaAutocreacion,
+        
+        actualizaAutocreaciones : function(selectorAutocreaciones,fieldSelector, classToRemove, removeSelector, creationCallback, removeCallback){
+            $(selectorAutocreaciones).each( function(number,elem){
+                ret.autocreacion( $(elem),fieldSelector,classToRemove,removeSelector,creationCallback,removeCallback);
+            });
         }
     };
+    
+    return ret;
     
 })();
