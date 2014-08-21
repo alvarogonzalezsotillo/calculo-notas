@@ -35,9 +35,9 @@
                 var templateElem = $(".trabajo").first();
                 var fieldSelector = "input.nota";
                 var classToRemove = "trabajo-por-crear";
+                var removeSelector = ".quita-trabajo";
                 
-                
-                Autocreacion.autocreacion(templateElem,fieldSelector,classToRemove);
+                Autocreacion.autocreacion(templateElem,fieldSelector,classToRemove,removeSelector);
             }
             
             $(document).ready(ready);
@@ -61,6 +61,7 @@
                 <div class="trabajo trabajo-por-crear">
                     <label class="estrecho">Trabajo <span class="autonumerico-trabajo"></span></label>
                     <input class="nota nota-trabajo" type="number"/>
+                    <span class="quita-trabajo">Eliminar</span>
                 </div>
             </div>
 
