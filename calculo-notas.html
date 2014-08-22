@@ -290,7 +290,10 @@
                     else{
                         input.addClass( "calculado" );
                     }
-                    $("input",llave).first().change();
+                    
+                    var camposPorActualizar = $("input").filter(':not(".trabajo-por-crear *")');                
+                    camposPorActualizar.change();
+                    
                     actualizaCalculados();
                 }
                 
