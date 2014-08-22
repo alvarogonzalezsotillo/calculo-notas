@@ -6,7 +6,7 @@ var Autocreacion = (function(){
     }
     
     
-    function UnaAutocreacion(templateElem, fieldSelector, classToRemove, removeSelector, creationCallback, removeCallback){
+    function UnaAutocreacion(templateElem, fieldSelector, classToRemove, removeSelector, creationCallback, removeCallback,changeCallback){
         var templateCopy = $(templateElem).clone();
         var parentElem = $(templateElem).parent();
 
@@ -28,11 +28,17 @@ var Autocreacion = (function(){
         }
         
         var fieldChanged = function(jqEvent){
+            
+            
             var field = $(jqEvent.currentTarget);
 
             var line = lineOf(field);
 
             debug( "line:" + $(line).prop("class" ) );
+
+            if( changeCallback ){
+                changeCallback(line);
+            }
             
             if( !line.hasClass(classToRemove) ){
                 debug( "Ya no tiene la clase:" + classToRemove );
@@ -66,9 +72,9 @@ var Autocreacion = (function(){
     var ret = {
         autocreacion: UnaAutocreacion,
         
-        actualizaAutocreaciones : function(selectorAutocreaciones,fieldSelector, classToRemove, removeSelector, creationCallback, removeCallback){
+        actualizaAutocreaciones : function(selectorAutocreaciones,fieldSelector, classToRemove, removeSelector, creationCallback, removeCallback, changeCallback){
             $(selectorAutocreaciones).each( function(number,elem){
-                ret.autocreacion( $(elem),fieldSelector,classToRemove,removeSelector,creationCallback,removeCallback);
+                ret.autocreacion( $(elem),fieldSelector,classToRemove,removeSelector,creationCallback,removeCallback,changeCallback);
             });
         }
     };

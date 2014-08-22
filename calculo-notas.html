@@ -127,71 +127,23 @@
             }
             
             
-            function actualizaBotonesAnadirTrabajos(){
 
-                function calculaNotaTrabajos(trabajos){
-                    
-                    var notaEvaluacionTrabajos = $(".evaluacion-trabajos",trabajos);
-                    var notasTrabajos = $(".nota-trabajo",trabajos); 
-                    var cantidad = notasTrabajos.length;
-                    var suma = 0;
-                    notasTrabajos.each( function(number,element){
-                        var v = parseFloat(element.value);  
-                        v = isNaN(v) ? 0 : v;
-                        suma = suma + v;
-                    });
-                    var nota = suma/cantidad;
-                    
-                    notaEvaluacionTrabajos.val(suma/cantidad).change();
-                }
+            function calculaNotaTrabajos(trabajos){
 
-                
-                $(".nuevo-trabajo").button().click( function(event){
-                    
-                    var t = $(event.target);
-                    var contenedorTrabajos = t.closest(".calculo-trabajos");
-                    
-                    var trabajos = t.closest(".trabajos");
-                    var notaTrabajos = $(".evaluacion-trabajos",trabajos);
-                    
-                    var div = $("<div/>", {
-                        "class" : "trabajo"                                       
-                    });
-                    contenedorTrabajos.append( div );
-                    
-					var label = $("<label/>")
-					label.html( "Trabajo" );
-                    div.append( label );
-				
-					var campoNota = $("<input/>", {
-						"type" : "number",
-						"class" : "nota-trabajo"
-						
-					} );
-				
-					div.append( campoNota );
-					
-					ajustaCampoNota(campoNota);
-                    
-                    var quitarNota = $("<div>-</div>",{
-                        "class" : "quitar-trabajo"
-                    });
-                    
-                    div.append( quitarNota );
-                    
-                    quitarNota.button().click( function(event){
-                        div.remove();
-                        calculaNotaTrabajos(trabajos);
-                    });
-                    
-                    campoNota.change( function(){
-                        calculaNotaTrabajos(trabajos);
-                    });
-                
-                    calculaNotaTrabajos(trabajos);
-                    
+                var notaEvaluacionTrabajos = $(".evaluacion-trabajos",trabajos);
+                var notasTrabajos = $(".nota-trabajo",trabajos); 
+                var cantidad = notasTrabajos.length;
+                var suma = 0;
+                notasTrabajos.each( function(number,element){
+                    var v = parseFloat(element.value);  
+                    v = isNaN(v) ? 0 : v;
+                    suma = suma + v;
                 });
+                var nota = suma/cantidad;
+
+                notaEvaluacionTrabajos.val(suma/cantidad).change();
             }
+                
             
             
             function registraCalculadorNotaExamenes(){
@@ -280,6 +232,21 @@
                 
                 actualizaCalculados();
                 
+
+                var recalculandoNotas = false;
+                function recalculaNotas(){
+                    if( recalculandoNotas ){
+                        return;
+                    }
+                    try{
+                        recalculandoNotas = true;
+                        var camposPorActualizar = $("input").filter(':not(".trabajo-por-crear *")');                
+                        camposPorActualizar.change();
+                    }
+                    finally{
+                        recalculandoNotas = false;
+                    }
+                }
                 
                 function actualizaTotalCalculado(llave){
                     llave = $(llave);
@@ -291,9 +258,7 @@
                         input.addClass( "calculado" );
                     }
                     
-                    var camposPorActualizar = $("input").filter(':not(".trabajo-por-crear *")');                
-                    camposPorActualizar.change();
-                    
+                    recalculaNotas();
                     actualizaCalculados();
                 }
                 
@@ -310,9 +275,17 @@
                 var fieldSelector = "input.nota";
                 var classToRemove = "trabajo-por-crear";
                 var removeSelector = ".quita-trabajo";
+                var creationCB;
+                var removeCB;
+                var changeCB = function(){
+                    var t = $(".trabajos");
+                    t.each( function(number,elem){
+                        calculaNotaTrabajos($(elem));
+                    });
+                }
                 
                 //Autocreacion.autocreacion(templateElem,fieldSelector,classToRemove,removeSelector);
-                Autocreacion.actualizaAutocreaciones(".trabajo",fieldSelector,classToRemove,removeSelector);
+                Autocreacion.actualizaAutocreaciones(".trabajo",fieldSelector,classToRemove,removeSelector,creationCB,removeCB,changeCB);
                 
             }
             
