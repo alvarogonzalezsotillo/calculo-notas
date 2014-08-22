@@ -139,9 +139,9 @@
                     v = isNaN(v) ? 0 : v;
                     suma = suma + v;
                 });
-                var nota = suma/cantidad;
+                var nota = suma/(Math.max(cantidad-1,1));
 
-                notaEvaluacionTrabajos.val(suma/cantidad).change();
+                notaEvaluacionTrabajos.val(nota).change();
             }
                 
             
@@ -262,30 +262,31 @@
                     actualizaCalculados();
                 }
                 
-                
-
-                
                 Colapsable.actualizaLlavesExpandibles();
                 Colapsable.avisaColapsadoExpandido( function(llave){
                     actualizaTotalCalculado(llave);
                 });
 
                 
-                var templateElem = $(".trabajo").first();
-                var fieldSelector = "input.nota";
-                var classToRemove = "trabajo-por-crear";
-                var removeSelector = ".quita-trabajo";
-                var creationCB;
-                var removeCB;
-                var changeCB = function(){
-                    var t = $(".trabajos");
-                    t.each( function(number,elem){
-                        calculaNotaTrabajos($(elem));
-                    });
+                function actualizaAutocreacionesDeTrabajos(){
+
+                    var templateElem = $(".trabajo").first();
+                    var fieldSelector = "input.nota";
+                    var classToRemove = "trabajo-por-crear";
+                    var removeSelector = ".quita-trabajo";
+                    var changeCB = function(){
+                        var t = $(".trabajos");
+                        t.each( function(number,elem){
+                            calculaNotaTrabajos($(elem));
+                        });
+                    }
+                    var creationCB = changeCB;
+                    var removeCB = changeCB;
+
+                    Autocreacion.actualizaAutocreaciones(".trabajo",fieldSelector,classToRemove,removeSelector,creationCB,removeCB,changeCB);
                 }
                 
-                //Autocreacion.autocreacion(templateElem,fieldSelector,classToRemove,removeSelector);
-                Autocreacion.actualizaAutocreaciones(".trabajo",fieldSelector,classToRemove,removeSelector,creationCB,removeCB,changeCB);
+                actualizaAutocreacionesDeTrabajos();
                 
             }
             
