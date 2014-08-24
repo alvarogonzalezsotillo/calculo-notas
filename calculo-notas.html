@@ -24,6 +24,12 @@
 		<link href="css/ui-lightness/jquery-ui-1.10.4.css" rel="stylesheet" />
         
         <script type="text/javascript">
+            
+            var porcentajeExamenes = .65;
+            var porcentajeTrabajos = .30;
+            var porcentajeActitud = .05;
+            
+            
 		
 
             function aseguraNumeroEvaluaciones(numero){
@@ -35,12 +41,22 @@
             }
             
             function convertirExplicaciones(){
+                
+                function tantoPorUnoACadena(tpu){
+                    var porcentaje = Math.floor(tpu*100);
+                    return porcentaje + "%";
+                }
+                
+                var examenes = tantoPorUnoACadena(porcentajeExamenes);
+                var trabajos = tantoPorUnoACadena(porcentajeTrabajos);
+                var actitud = tantoPorUnoACadena(porcentajeActitud);
+                
                 var explicacionModulo = "La nota del módulo es la media de las notas de las evaluaciones, redondeada. " +
                     "Si alguna evaluación puntua por debajo de 5, la nota máxima será un 4.";
 
                 var explicacionEvaluacion = "La nota de la evaluación se calcula a partir de las notas de los " +
-                    "exámenes, trabajos y actitud. Es una suma poderada en la que los exámenes cuentan un 65%, " +
-                    " los trabajos un 30% y la actitud un 5%";
+                    "exámenes, trabajos y actitud. Es una suma poderada en la que los exámenes cuentan un " + examenes +
+                    " los trabajos un " + trabajos + " y la actitud un " + actitud;
 
                 var explicacionExamenes = "Si se tiene más de un 3,5 en cada parcial, se calcula su media. " +
                             "La nota será la media de los parciales o la del final, la que sea mayor. " +
@@ -81,7 +97,7 @@
 
                 function calculaNotaEvaluacion(evaluacion){
                     var elems = [".evaluacion-examenes",".evaluacion-trabajos",".evaluacion-actitud"];
-                    var percentage = [.65,.3,.05];
+                    var percentage = [porcentajeExamenes,porcentajeTrabajos,porcentajeActitud];
                     var suma = 0;
                     for( i in elems ){
                         var id = elems[i];
