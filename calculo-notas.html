@@ -178,17 +178,11 @@
                         var p2 = parseFloat( parciales.get(1).value ) || 0;
                         
                         var mediaP = (p1 + p2)/2;
-                        var nota = mediaP;
-                        var valeMediaP = mediaP >= 5.0;
-                        if( valeMediaP ){
-                            nota = Math.max(finalV,mediaP);
+                        if( p1 < 3.5 || p2 < 3.5 ){
+                            // LOS PARCIALES PUEDEN APROBAR SI CADA UNO DE ELLOS ES SUPERIOR A 3.5
+                            mediaP = Math.min(mediaP,4);
                         }
-                        else if( finalV > mediaP ){
-                            nota = finalV;
-                        }
-                        else{
-                            nota = mediaP;
-                        }
+                        var nota = Math.max(finalV,mediaP);
 
                         nota = Math.max(nota,recuperacionV);
 
@@ -224,6 +218,12 @@
                     
             function ready(){
 
+                function getParameterByName(name) {
+                    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+                    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"), results = regex.exec(location.search);
+                    return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+                }
+                
                 function actualizaCalculados(){
                     console.log("Actualizando calculados" );
 
@@ -235,8 +235,8 @@
 
                     
 
-                
-                aseguraNumeroEvaluaciones(3);
+                var numeroEvaluaciones = parseInt( getParameterByName("evaluaciones") ) || 3;
+                aseguraNumeroEvaluaciones(numeroEvaluaciones);
                 
                 convertirExplicaciones();
                 
